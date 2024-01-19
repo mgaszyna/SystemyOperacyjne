@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Funkcja do generowania losowego wyboru komputera
+int generujWyborKomputera() {
+    return rand() % 3;  // 0 - papier, 1 - kamień, 2 - nożyce
+}
+
+// Funkcja do wyświetlania wyboru w formie tekstu
+void wyswietlWybor(int wybor) {
+    switch (wybor) {
+        case 0:
+            printf("Papier");
+            break;
+        case 1:
+            printf("Kamień");
+            break;
+        case 2:
+            printf("Nożyce");
+            break;
+    }
+}
+
+int main() {
+    srand(time(NULL));  // Inicjalizacja generatora liczb pseudolosowych
+
+    int wyniki[3] = {0};  // Indeksy: 0 - remis, 1 - wygrana gracza, 2 - wygrana komputera
+    int wyborGracza, wyborKomputera, wynikRundy;
+    time_t poczatekGry, koniecGry;
+
+    printf("Witaj w grze Papier, Kamień, Nożyce!\n");
+
+    time(&poczatekGry);  // Zapisz czas rozpoczęcia gry
+
+    do {
+        // Komputer dokonuje losowego wyboru
+        wyborKomputera = generujWyborKomputera();
+
+        // Gracz dokonuje wyboru
+        printf("\nWybierz: 0 - Papier, 1 - Kamień, 2 - Nożyce: ");
+        scanf("%d", &wyborGracza);
+
+        // Wyświetl wybory
+        printf("Gracz wybrał: ");
+        wyswietlWybor(wyborGracza);
+        printf("\nKomputer wybrał: ");
+        wyswietlWybor(wyborKomputera);
+        printf("\n");
+
+        // Sprawdź wynik rundy
+        if (wyborGracza == wyborKomputera) {
+            printf("Remis!\n");
+            wyniki[0]++;
+        } else if ((wyborGracza == 0 && wyborKomputera == 1) ||
+                   (wyborGracza == 1 && wyborKomputera == 2) ||
+                   (wyborGracza == 2 && wyborKomputera == 0)) {
+            printf("Gracz wygrywa!\n");
+            wyniki[1]++;
+        } else {
+            printf("Komputer wygrywa!\n");
+            wyniki[2]++;
+        }
+
+        // Wyzeruj bufor wejścia
+        while (getchar() != '\n');
+
+        // Kontynuuj grę?
+        printf("\nCzy chcesz kontynuować? (1 - Tak, 0 - Nie): ");
+        scanf("%d", &wynikRundy);
+
+    } while (wynikRundy);
+
+    time(&koniecGry);  // Zapisz czas zakończenia gry
+
+    // Wyświetl wyniki
+    printf("\nWyniki gry:\n");
+    printf("Remisy: %d\n", wyniki[0]);
+    printf("Wygrane gracza: %d\n", wyniki[1]);
+    printf("Wygrane komputera: %d\n", wyniki[2]);
+
+    // Oblicz i wyświetl czas trwania gry
+    double czasTrwania = difftime(koniecGry, poczatekGry);
+    printf("\nCzas trwania gry: %.2lf sekundy\n", czasTrwania);
+
+    return 0;
+}
