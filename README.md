@@ -1,1 +1,1 @@
-# sysopy
+# Systemy Operacyjne
